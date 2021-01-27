@@ -1,4 +1,4 @@
-# AssetInstaller
+# AppxInstaller
 
 Appx installation utility.
 
