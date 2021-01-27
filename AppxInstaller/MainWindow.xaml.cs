@@ -43,6 +43,8 @@ namespace AppxInstaller
             Setup.InUiThread = this.InUiThread;
 
             DataContext = Setup;
+
+            Setup.InstallDirectory = AppxBundle.GetAppxFolder();
         }
 
         private void OnDrag(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -93,12 +95,13 @@ namespace AppxInstaller
             await dlg.ShowAsync();
         }
 
+        // MP! bug: this call generate an exception when on an elevated account ???
         private async void OnSelectFolder(object sender, RoutedEventArgs e)
         {
             var folderPicker = new FolderPicker();
             this.InitializeWinRTChild(folderPicker);
 
-            folderPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            folderPicker.SuggestedStartLocation = PickerLocationId.Unspecified;
             folderPicker.FileTypeFilter.Add("*");
             var folder = await folderPicker.PickSingleFolderAsync();
 
