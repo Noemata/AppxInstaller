@@ -19,10 +19,10 @@ A utility application that installs the content of an embedded Appx and its Cert
 
 Note: This is a WIP POC that was created to reduce Appx sideloaded installation to one button click.  On first run bundled Appx assets will be extracted to a user account temp folder.  The certificate file remains as an embedded resource within the exectuable binary.  You could opt to encrypt the certificate file.
 
-Credits:
-UI Ideas: 
-IInitializeWithWindow lib: https://github.com/mveril
-Package handling ideas: https://github.com/colinkiama/UWP-Package-Installer , https://github.com/UWPX/UWPX-Installer
+## Credits
+* UI Ideas: https://github.com/oleg-shilo/wixsharp
+* IInitializeWithWindow lib: https://github.com/mveril
+* Package handling ideas: https://github.com/colinkiama/UWP-Package-Installer , https://github.com/UWPX/UWPX-Installer
 
 ## Screenshot
 ![Screenshot](https://github.com/Noemata/AppxInstaller/raw/master/Screenshot.png)
