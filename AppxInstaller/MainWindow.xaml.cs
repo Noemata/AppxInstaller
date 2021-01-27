@@ -22,7 +22,8 @@ namespace AppxInstaller
         const string ProductName = "SimpleApp";
         const string ProductVersion = "version 1.00";
         const string HelpMessage = "Install Appx from:";
-        const string ContainerFolder = "BroadcastProjects";
+        const string BundleName = "SimpleApp_1.0.0.0_x64.msixbundle";
+        const string CertificateName = "SimpleApp_1.0.0.0_x64.cer";
 
         public MainWindow()
         {

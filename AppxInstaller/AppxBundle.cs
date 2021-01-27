@@ -158,8 +158,6 @@ namespace AppxInstaller
             }
         }
 
-        // MP! todo: add credits to readme
-        // MP! todo: tell the user the location of Appx extraction folder
         // MP! todo: sort out best way to get app version information
         // MP! todo: get status of product installation (already installed yes/no)
         // MP! todo: add APIs for reinstall and removal of app
@@ -170,17 +168,17 @@ namespace AppxInstaller
             return GetResourcePath("");
         }
 
-        public async static Task<bool> InstallAppx(IProgress<AppxProgress> progress, CancellationToken stop = default)
+        public async static Task<bool> InstallAppx(string bundleName, string certificateName, IProgress<AppxProgress> progress, CancellationToken stop = default)
         {
             try
             {
-                Uri uriToAppx = new Uri(GetResourcePath("SimpleApp_1.0.0.0_x64.msixbundle"));
+                Uri uriToAppx = new Uri(GetResourcePath(bundleName));
                 List<Uri> urisToDependencies = GetDependencies();
 
-                // todo: check cancellation token before installing certificate
-                InstallCertificate("SimpleApp_1.0.0.0_x64.cer");
-                // todo: figure out how to remove app most efficiently, including its certificate
-                //RemoveCertificate("SimpleApp");
+                if (stop.IsCancellationRequested)
+                    throw new IOException("Install cancelled.");
+
+                InstallCertificate(certificateName);
 
                 Progress<DeploymentProgress> progressCallback = new Progress<DeploymentProgress>((op) =>
                 {
@@ -206,6 +204,8 @@ namespace AppxInstaller
 
         public async static Task<bool> RemoveAppx(IProgress<AppxProgress> progress, CancellationToken stop = default)
         {
+            // todo: figure out how to remove app most efficiently, including its certificate
+            //RemoveCertificate("SimpleApp");
             return false;
         }
     }

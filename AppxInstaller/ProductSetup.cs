@@ -23,7 +23,7 @@
             set => SetValue(ref initialCanUnInstall, value);
         }
 
-        public ProductSetup(string productName, string productVersion) : base(productName, productVersion)
+        public ProductSetup(string productName, string productVersion, string bundleName, string certificateName) : base(productName, productVersion, bundleName, certificateName)
         {
             InitialCanInstall = true;
             InitialCanRepair = InitialCanUnInstall = false;

@@ -14,11 +14,16 @@ namespace AppxInstaller
         /// </summary>
         public Action<Action> InUiThread = (action) => action();
 
-        public AssetSetup(string productName, string productVersion)
+        string BundleName;
+        string CertificateName;
+
+        public AssetSetup(string productName, string productVersion, string bundleName, string certificateName)
         {
             IsCurrentlyInstalled = false;
             ProductName = productName;
             ProductVersion = productVersion;
+            BundleName = bundleName;
+            CertificateName = certificateName;
 
             ProductStatus = string.Format("The product is {0}INSTALLED\n\n", IsCurrentlyInstalled ? "" : "NOT ");
         }
@@ -41,7 +46,7 @@ namespace AppxInstaller
             IsRunning = true;
             ProgressTotal = 100;
             cancelTransfer = new CancellationTokenSource();
-            bool result = await AppxBundle.InstallAppx(progress, cancelTransfer.Token);
+            bool result = await AppxBundle.InstallAppx(BundleName, CertificateName, progress, cancelTransfer.Token);
             IsRunning = false;
             cancelTransfer = null;
         }
