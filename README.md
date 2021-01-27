@@ -16,7 +16,7 @@ A utility application that installs the content of an embedded Appx and it certi
 * You will be prompted to install .Net 5 if it is not present.
 * Unblock this executable if it is downloaded from a trusted source.
 
-Note: This is a WIP POC that was created to reduce Appx installation to one button click.
+Note: This is a WIP POC that was created to reduce Appx installation to one button click.  On first run, bundled Appx assets will be extracted to a temp folder.  The certificate file remains as an embedded resource within the exectuable binary.  You could opt to encrypt the certificate file.
 
 ## Screenshot
 ![Screenshot](https://github.com/Noemata/AppxInstaller/raw/master/Screenshot.png)
