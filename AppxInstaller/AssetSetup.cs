@@ -33,8 +33,14 @@ namespace AppxInstaller
         {
             Progress<AppxProgress> progress = new Progress<AppxProgress>(p =>
             {
-                if (p.Percentage == ProgressTotal)
+                if (p.Percentage == 1000)
                 {
+                    // MP! todo: Resolve exception handling.
+                    ErrorStatus = p.Result;
+                }
+                else if (p.Percentage == ProgressTotal)
+                {
+                    // MP! todo: Resolve what happens on completion.
                     ProgressCurrentPosition = (int)p.Percentage;
                 }
                 else

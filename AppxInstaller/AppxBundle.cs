@@ -190,13 +190,11 @@ namespace AppxInstaller
 
                 DeploymentResult result = await pkgManager.AddPackageAsync(uriToAppx, urisToDependencies, DeploymentOptions.ForceTargetApplicationShutdown).AsTask(progressCallback).WaitOrCancel(stop);
 
-                string error = result.ErrorText;
-
                 return result.IsRegistered;
             }
             catch (Exception ex)
             {
-                var appxProgress = new AppxProgress(0, ex.Message);
+                var appxProgress = new AppxProgress(1000, ex.Message); // Set percentage to 1000 to trigger error handling in UI
                 progress.Report(appxProgress);
                 return false;
             }
