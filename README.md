@@ -19,4 +19,4 @@ A utility application that installs the content of an embedded Appx and it certi
 Note: This is a WIP POC that was created to reduce Appx installation to one button click.
 
 ## Screenshot
-![Screenshot](https://github.com/Noemata/AssetInstaller/raw/master/Screenshot.png)
+![Screenshot](https://github.com/Noemata/AppxInstaller/raw/master/Screenshot.png)
