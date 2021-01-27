@@ -40,7 +40,7 @@ namespace AppxInstaller
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Setup = new ProductSetup(ProductName, ProductVersion);
+            Setup = new ProductSetup(ProductName, ProductVersion, BundleName, CertificateName);
             Setup.InUiThread = this.InUiThread;
 
             DataContext = Setup;
