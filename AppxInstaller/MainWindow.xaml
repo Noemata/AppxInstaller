@@ -215,25 +215,21 @@
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="4*" />
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2.3*" />
+                <ColumnDefinition Width="11*" />
+                <ColumnDefinition Width="0.4*" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
                        Margin="2,2,0,0"
                        Text="Appx folder:" />
             <TextBlock Grid.Column="1"
+                       MouseLeftButtonDown="OnFolder"
+                       Foreground="LightBlue"
+                       TextDecorations="Underline"
+                       TextTrimming="CharacterEllipsis"
                        Margin="0,2,0,0"
                        HorizontalAlignment="Left"
                        Text="{Binding InstallDirectory}" />
-            <Button Grid.Column="2"
-                    Width="30"
-                    Height="18"
-                    Margin="4,2,3,2"
-                    VerticalAlignment="Top"
-                    Click="OnSelectFolder"
-                    FontWeight="Bold"
-                    Content="..." />
         </Grid>
 
         <TextBlock Grid.Row="1"

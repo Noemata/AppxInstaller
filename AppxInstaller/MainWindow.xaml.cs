@@ -63,6 +63,12 @@ namespace AppxInstaller
             Close();
         }
 
+        private void OnFolder(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(Setup.InstallDirectory))
+                Process.Start("explorer.exe", Setup.InstallDirectory);
+        }
+
         private void OnInstall(object sender, RoutedEventArgs e)
         {
             Setup.StartInstall();
@@ -94,22 +100,6 @@ namespace AppxInstaller
             var dlg = new MessageDialog(dlgMessage, "Instructions:");
             this.InitializeWinRTChild(dlg);
             await dlg.ShowAsync();
-        }
-
-        // MP! bug: this call generates an exception when on an elevated account ???
-        private async void OnSelectFolder(object sender, RoutedEventArgs e)
-        {
-            var folderPicker = new FolderPicker();
-            this.InitializeWinRTChild(folderPicker);
-
-            folderPicker.SuggestedStartLocation = PickerLocationId.Unspecified;
-            folderPicker.FileTypeFilter.Add("*");
-            var folder = await folderPicker.PickSingleFolderAsync();
-
-            if (folder != null)
-            {
-                Setup.InstallDirectory = folder.Path;
-            }
         }
     }
 }

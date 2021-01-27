@@ -176,7 +176,7 @@ namespace AppxInstaller
                 List<Uri> urisToDependencies = GetDependencies();
 
                 if (stop.IsCancellationRequested)
-                    throw new IOException("Install cancelled.");
+                    throw new IOException("Install cancelled.");  // Likely to be impossible for user to cancel certificate installation.  Consider adding in slight delay?
 
                 InstallCertificate(certificateName);
 

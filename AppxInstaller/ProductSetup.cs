@@ -26,7 +26,7 @@
         public ProductSetup(string productName, string productVersion, string bundleName, string certificateName) : base(productName, productVersion, bundleName, certificateName)
         {
             InitialCanInstall = true;
-            InitialCanRepair = InitialCanUnInstall = false;
+            InitialCanRepair = InitialCanUnInstall = true;
         }
     }
 }
