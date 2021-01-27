@@ -21,7 +21,7 @@ namespace AppxInstaller
 
         const string ProductName = "SimpleApp";
         const string ProductVersion = "version 1.00";
-        const string HelpMessage = "Select the Broadcast Explorer Project folder as your installation directory.";
+        const string HelpMessage = "Install Appx from:";
         const string ContainerFolder = "BroadcastProjects";
 
         public MainWindow()
@@ -89,13 +89,13 @@ namespace AppxInstaller
 
         private async void OnHelp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            string dlgMessage = HelpMessage + (ContainerFolder != null ? $"\nExample -> D:\\Projects\\{ContainerFolder}" : "");
+            string dlgMessage = HelpMessage + (Setup.InstallDirectory != null ? $"\n{Setup.InstallDirectory}" : "");
             var dlg = new MessageDialog(dlgMessage, "Instructions:");
             this.InitializeWinRTChild(dlg);
             await dlg.ShowAsync();
         }
 
-        // MP! bug: this call generate an exception when on an elevated account ???
+        // MP! bug: this call generates an exception when on an elevated account ???
         private async void OnSelectFolder(object sender, RoutedEventArgs e)
         {
             var folderPicker = new FolderPicker();
