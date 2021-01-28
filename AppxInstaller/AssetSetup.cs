@@ -14,7 +14,6 @@ namespace AppxInstaller
         /// </summary>
         public Action<Action> InUiThread = (action) => action();
 
-        string PackageName;
         string BundleName;
         string CertificateName;
 
@@ -22,7 +21,6 @@ namespace AppxInstaller
 
         public AssetSetup(string packageName, string productName, string productVersion, string bundleName, string certificateName)
         {
-            PackageName = packageName;
             ProductName = productName;
             ProductVersion = productVersion;
             BundleName = bundleName;
@@ -96,7 +94,6 @@ namespace AppxInstaller
             if (IsCurrentlyInstalled)
             {
                 IsRunning = true;
-                AppxBundle.IsPackageInstalled(PackageName, ProductVersion);
             }
             else
                 ErrorStatus = "Product is not installed";
