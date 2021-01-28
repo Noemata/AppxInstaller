@@ -159,8 +159,6 @@ namespace AppxInstaller
             }
         }
 
-        // MP! todo: sort out best way to get app version information
-        // MP! todo: get status of product installation (already installed yes/no)
         // MP! todo: add APIs for reinstall and removal of app
         // MP! todo: cleanup UI and code
 
@@ -197,7 +195,7 @@ namespace AppxInstaller
 
                             ushort build = 0, major = 0, minor = 0, revision = 0;
 
-                            bool valid = ushort.TryParse(subparts[0], out build) == true && ushort.TryParse(subparts[1], out major) == true && ushort.TryParse(subparts[2], out minor) == true && ushort.TryParse(subparts[3], out revision) == true;
+                            bool valid = ushort.TryParse(subparts[0], out build) && ushort.TryParse(subparts[1], out major) && ushort.TryParse(subparts[2], out minor) && ushort.TryParse(subparts[3], out revision);
 
                             if (valid)
                             {

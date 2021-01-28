@@ -188,7 +188,7 @@
                    Foreground="White">
 
             <Run Text="{Binding ProductName}" />
-            <Run Text=" - " />
+            <Run Text=" - version " />
             <Run Text="{Binding ProductVersion}" />
         </TextBlock>
 
@@ -228,6 +228,7 @@
                        TextDecorations="Underline"
                        TextTrimming="CharacterEllipsis"
                        Margin="0,2,0,0"
+                       Cursor="Hand"
                        HorizontalAlignment="Left"
                        Text="{Binding InstallDirectory}" />
         </Grid>
