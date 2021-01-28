@@ -20,10 +20,11 @@ namespace AppxInstaller
         public ProductSetup Setup { get; set; }
 
         const string ProductName = "SimpleApp";
-        const string ProductVersion = "version 1.00";
+        const string ProductVersion = "0.1.0.1"; // Note: Forcing not installed state
         const string HelpMessage = "Install Appx from:";
         const string BundleName = "SimpleApp_1.0.0.0_x64.msixbundle";
         const string CertificateName = "SimpleApp_1.0.0.0_x64.cer";
+        const string PackageName = "2495a1ba-4af4-437c-8405-e9cbf8378628";
 
         public MainWindow()
         {
@@ -40,12 +41,10 @@ namespace AppxInstaller
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Setup = new ProductSetup(ProductName, ProductVersion, BundleName, CertificateName);
+            Setup = new ProductSetup(PackageName, ProductName, ProductVersion, BundleName, CertificateName);
             Setup.InUiThread = this.InUiThread;
 
             DataContext = Setup;
-
-            Setup.InstallDirectory = AppxBundle.GetAppxFolder();
         }
 
         private void OnDrag(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -76,7 +75,7 @@ namespace AppxInstaller
 
         private void OnRepare(object sender, RoutedEventArgs e)
         {
-            //Setup.StartRepair();
+            Setup.StartRepair();
         }
 
         private void OnUninstall(object sender, RoutedEventArgs e)

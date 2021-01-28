@@ -14,18 +14,23 @@ namespace AppxInstaller
         /// </summary>
         public Action<Action> InUiThread = (action) => action();
 
+        string PackageName;
         string BundleName;
         string CertificateName;
 
-        public AssetSetup(string productName, string productVersion, string bundleName, string certificateName)
+        const string installedmessage = "The product is {0}INSTALLED\n\n";
+
+        public AssetSetup(string packageName, string productName, string productVersion, string bundleName, string certificateName)
         {
-            IsCurrentlyInstalled = false;
+            PackageName = packageName;
             ProductName = productName;
             ProductVersion = productVersion;
             BundleName = bundleName;
             CertificateName = certificateName;
+            InstallDirectory = AppxBundle.GetAppxFolder();
+            IsCurrentlyInstalled = AppxBundle.IsPackageInstalled(packageName, productVersion);
 
-            ProductStatus = string.Format("The product is {0}INSTALLED\n\n", IsCurrentlyInstalled ? "" : "NOT ");
+            ProductStatus = string.Format(installedmessage, IsCurrentlyInstalled ? "" : "NOT ");
         }
 
         CancellationTokenSource cancelTransfer = null;
@@ -55,6 +60,8 @@ namespace AppxInstaller
             bool result = await AppxBundle.InstallAppx(BundleName, CertificateName, progress, cancelTransfer.Token);
             IsRunning = false;
             cancelTransfer = null;
+            IsCurrentlyInstalled = result;
+            ProductStatus = string.Format(installedmessage, IsCurrentlyInstalled ? "" : "NOT ");
         }
 
         /// <summary>
@@ -89,6 +96,7 @@ namespace AppxInstaller
             if (IsCurrentlyInstalled)
             {
                 IsRunning = true;
+                AppxBundle.IsPackageInstalled(PackageName, ProductVersion);
             }
             else
                 ErrorStatus = "Product is not installed";

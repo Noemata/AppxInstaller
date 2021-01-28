@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 using Windows.Management.Deployment;
+using System.Diagnostics;
 
 namespace AppxInstaller
 {
@@ -168,6 +169,58 @@ namespace AppxInstaller
             return GetResourcePath("");
         }
 
+        public static bool IsPackageInstalled(string packageName, string productVersion)
+        {
+            var pkgManager = new PackageManager();
+
+            var packages = pkgManager.FindPackages();
+
+            foreach (var package in packages)
+            {
+                try
+                {
+                    var id = package.Id;
+                    string name = id.Name;
+
+                    if (name.Equals(packageName))
+                    {
+                        string version = $"{id.Version.Build}.{id.Version.Major}.{id.Version.Minor}.{id.Version.Revision}";
+
+                        if (version.Equals(productVersion))
+                            return true;
+                        else
+                        {
+                            string[] subparts = productVersion.Split(".");
+
+                            if (subparts.Length != 4)
+                                return false;
+
+                            ushort build = 0, major = 0, minor = 0, revision = 0;
+
+                            bool valid = ushort.TryParse(subparts[0], out build) == true && ushort.TryParse(subparts[1], out major) == true && ushort.TryParse(subparts[2], out minor) == true && ushort.TryParse(subparts[3], out revision) == true;
+
+                            if (valid)
+                            {
+                                if (build > id.Version.Build) return false;
+                                if (build < id.Version.Build) return true;
+                                if (major > id.Version.Major) return false;
+                                if (major < id.Version.Major) return true;
+                                if (minor > id.Version.Minor) return false;
+                                if (minor < id.Version.Minor) return true;
+                                if (revision > id.Version.Revision) return false;
+                                if (revision < id.Version.Revision) return true;
+                            }
+
+                            return false;
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            return false;
+        }
+
         public async static Task<bool> InstallAppx(string bundleName, string certificateName, IProgress<AppxProgress> progress, CancellationToken stop = default)
         {
             try
@@ -175,8 +228,9 @@ namespace AppxInstaller
                 Uri uriToAppx = new Uri(GetResourcePath(bundleName));
                 List<Uri> urisToDependencies = GetDependencies();
 
+                // Cancellation is likely to be impossible for user to trigger for Certificate installation.  Consider adding in slight delay?
                 if (stop.IsCancellationRequested)
-                    throw new IOException("Install cancelled.");  // Likely to be impossible for user to cancel certificate installation.  Consider adding in slight delay?
+                    throw new IOException("Install cancelled.");
 
                 InstallCertificate(certificateName);
 
@@ -194,17 +248,29 @@ namespace AppxInstaller
             }
             catch (Exception ex)
             {
-                var appxProgress = new AppxProgress(1000, ex.Message); // Set percentage to 1000 to trigger error handling in UI
+                // This exception will also fire when the CancellationToken is cancelled.
+                // Set percentage to 1000 to trigger error handling in UI
+                var appxProgress = new AppxProgress(1000, ex.Message); 
                 progress.Report(appxProgress);
                 return false;
             }
         }
 
-        public async static Task<bool> RemoveAppx(IProgress<AppxProgress> progress, CancellationToken stop = default)
+        public async static Task<bool> RemoveAppx(string bundleName, string certificateName, IProgress<AppxProgress> progress, CancellationToken stop = default)
         {
             // todo: figure out how to remove app most efficiently, including its certificate
-            //RemoveCertificate("SimpleApp");
-            return false;
+            try
+            {
+                //RemoveCertificate("SimpleApp");
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                var appxProgress = new AppxProgress(1000, ex.Message);
+                progress.Report(appxProgress);
+                return false;
+            }
         }
     }
 }
