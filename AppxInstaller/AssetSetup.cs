@@ -127,6 +127,8 @@ namespace AppxInstaller
         /// </summary>
         public virtual void StartRepair()
         {
+            return;
+
             if (IsCurrentlyInstalled)
             {
                 IsRunning = true;
