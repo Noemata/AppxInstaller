@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 
 using Windows.Management.Deployment;
 using System.Diagnostics;
+using WinRT.InitializeWithWindow;
 
 namespace AppxInstaller
 {
@@ -223,7 +224,7 @@ namespace AppxInstaller
             return false;
         }
 
-        public async static Task<bool> InstallAppx(string bundleName, string certificateName, IProgress<AppxProgress> progress, CancellationToken stop = default)
+        public async static Task<bool> InstallAppx(string bundleName, string certificateName, IProgress<AppxProgress> progress, CancellationToken stop = default, bool update = false)
         {
             try
             {
@@ -244,8 +245,14 @@ namespace AppxInstaller
 
                 var pkgManager = new PackageManager();
 
+                DeploymentResult result = null;
+
+                // MP! fixme: Hangs on next call.  Something to do with progressCallback, without it the call completes.
                 Debug.WriteLine("Installing package ...");
-                DeploymentResult result = await pkgManager.AddPackageAsync(uriToAppx, urisToDependencies, DeploymentOptions.ForceTargetApplicationShutdown).AsTask(progressCallback).WaitOrCancel(stop);
+                if (update)
+                    result = await pkgManager.UpdatePackageAsync(uriToAppx, urisToDependencies, DeploymentOptions.ForceTargetApplicationShutdown).AsTask(progressCallback).WaitOrCancel(stop);
+                else
+                    result = await pkgManager.AddPackageAsync(uriToAppx, urisToDependencies, DeploymentOptions.ForceTargetApplicationShutdown).AsTask(progressCallback).WaitOrCancel(stop);
                 Debug.WriteLine("Package installed ...");
 
                 return result.IsRegistered;
@@ -276,9 +283,13 @@ namespace AppxInstaller
 
                 var pkgManager = new PackageManager();
 
+                // MP! fixme: Hangs on next call.  Something to do with progressCallback, without it the call completes.  This only happens when the Delay below is added in.
                 Debug.WriteLine("Uninstalling package ...");
                 DeploymentResult result = await pkgManager.RemovePackageAsync(fullPackageName).AsTask(progressCallback).WaitOrCancel(stop);
                 Debug.WriteLine("Package uninstalled ...");
+
+                // Give the UI a chance to update so user can see progress at 100%.  Note: Putting this Delay in occasionally causes the above call to hang??
+                await Task.Delay(170);
 
                 return result.IsRegistered;
             }

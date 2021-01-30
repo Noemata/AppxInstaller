@@ -34,7 +34,7 @@ namespace AppxInstaller
 
         CancellationTokenSource cancelTransfer = null;
 
-        public async void Install()
+        public async void Install(bool update = false)
         {
             Progress<AppxProgress> progress = new Progress<AppxProgress>(p =>
             {
@@ -56,7 +56,7 @@ namespace AppxInstaller
             IsRunning = true;
             ProgressTotal = 100;
             cancelTransfer = new CancellationTokenSource();
-            bool result = await AppxBundle.InstallAppx(BundleName, CertificateName, progress, cancelTransfer.Token);
+            bool result = await AppxBundle.InstallAppx(BundleName, CertificateName, progress, cancelTransfer.Token, update);
             IsRunning = false;
             cancelTransfer = null;
             IsCurrentlyInstalled = result;
@@ -86,7 +86,6 @@ namespace AppxInstaller
                 }
             });
 
-            //CanCancel = IsRunning = true;
             IsRunning = true;
             ProgressTotal = 100;
             cancelTransfer = new CancellationTokenSource();
@@ -127,11 +126,13 @@ namespace AppxInstaller
         /// </summary>
         public virtual void StartRepair()
         {
-            return;
-
             if (IsCurrentlyInstalled)
             {
-                IsRunning = true;
+                // MP! resolve: Not handling existing installation correctly yet.  Sort out after hanging bug is fixed.
+                if (IsCurrentlyInstalled)
+                    Install();
+                else
+                    Install(update: true);
             }
             else
                 ErrorStatus = "Product is not installed";
