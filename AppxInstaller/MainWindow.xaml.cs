@@ -90,7 +90,7 @@ namespace AppxInstaller
 
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //e.Cancel = Setup.IsRunning;
+            e.Cancel = Setup.IsRunning;
         }
 
         private async void OnHelp(object sender, System.Windows.Input.MouseButtonEventArgs e)

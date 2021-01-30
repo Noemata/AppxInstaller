@@ -240,7 +240,6 @@ namespace AppxInstaller
 
                 var pkgManager = new PackageManager();
 
-                // MP! fixme: why do we hang on the await on occasion?
                 Debug.WriteLine("Installing package ...");
                 DeploymentResult result = await pkgManager.AddPackageAsync(uriToAppx, urisToDependencies, DeploymentOptions.ForceTargetApplicationShutdown).AsTask(progressCallback).WaitOrCancel(stop);
                 Debug.WriteLine("Package installed ...");

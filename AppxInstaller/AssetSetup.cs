@@ -9,8 +9,8 @@ namespace AppxInstaller
     public class AssetSetup : INotifyPropertyChanged
     {
         /// <summary>
-        /// The UI thread marshalling delegate. It should be set for the environments where cross-thread calls
-        /// must be marshalled (e.g. WPF, WinForms). Not needed otherwise (e.g. Console application).
+        /// The UI thread marshalling delegate. Used to marshall calls to the UI thread
+        /// when executed from a non UI thread.
         /// </summary>
         public Action<Action> InUiThread = (action) => action();
 
@@ -38,7 +38,6 @@ namespace AppxInstaller
             {
                 if (p.Percentage == 1000)
                 {
-                    // MP! todo: Resolve exception handling.
                     ErrorStatus = p.Result;
                 }
                 else if (p.Percentage == ProgressTotal)
@@ -159,7 +158,7 @@ namespace AppxInstaller
         }
 
         /// <summary>
-        /// Gets or sets the MSI ProductName.
+        /// Gets or sets the user visible ProductName.
         /// </summary>
         /// <value>
         /// The name of the product.

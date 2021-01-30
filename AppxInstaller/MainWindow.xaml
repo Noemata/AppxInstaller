@@ -199,17 +199,6 @@
                    Foreground="White"
                    Text="Copyright &#169; 2020 by Noemata&#10;All Rights Reserved" />
 
-        <CheckBox Grid.Row="1"
-                  Margin="26, 80, 0, 0"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  Foreground="#FFE0DFDF"
-                  Visibility="Hidden"
-                  IsChecked="{Binding InstallDocumentation}"
-                  IsEnabled="{Binding NotStarted}">
-            Inslall Documentation
-        </CheckBox>
-
         <Grid Grid.Row="1" Margin="26, 98, 0, 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
