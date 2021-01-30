@@ -160,7 +160,7 @@
         <StackPanel Grid.Row="1"
                     Margin="10, 10, 100, 5"
                     VerticalAlignment="Bottom">
-            <TextBlock Margin="0,5" Text="{Binding CurrentActionName}" />
+            <TextBlock Margin="0,5" Text="{Binding CurrentActionName}" Foreground="Orange" />
 
             <ProgressBar Height="10"
                          Maximum="{Binding ProgressTotal}"

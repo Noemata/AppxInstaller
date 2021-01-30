@@ -20,7 +20,8 @@ namespace AppxInstaller
         public ProductSetup Setup { get; set; }
 
         const string ProductName = "SimpleApp";
-        const string ProductVersion = "0.1.0.1"; // Note: Forcing not installed state
+        //const string ProductVersion = "0.1.0.1"; // Note: Forcing not installed state
+        const string ProductVersion = "0.1.0.0"; // Note: Forcing not installed state
         const string HelpMessage = "Install Appx from:";
         const string BundleName = "SimpleApp_1.0.0.0_x64.msixbundle";
         const string CertificateName = "SimpleApp_1.0.0.0_x64.cer";

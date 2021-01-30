@@ -167,11 +167,13 @@ namespace AppxInstaller
             return GetResourcePath("");
         }
 
-        public static bool IsPackageInstalled(string packageName, string productVersion)
+        public static bool IsPackageInstalled(string packageName, string productVersion, out string fullName)
         {
             var pkgManager = new PackageManager();
 
             var packages = pkgManager.FindPackages();
+
+            fullName = null;
 
             foreach (var package in packages)
             {
@@ -184,6 +186,8 @@ namespace AppxInstaller
                     {
                         string version = $"{id.Version.Build}.{id.Version.Major}.{id.Version.Minor}.{id.Version.Revision}";
 
+                        fullName = id.FullName;
+                        
                         if (version.Equals(productVersion))
                             return true;
                         else
@@ -256,16 +260,29 @@ namespace AppxInstaller
             }
         }
 
-        public async static Task<bool> RemoveAppx(string bundleName, string certificateName, IProgress<AppxProgress> progress, CancellationToken stop = default)
+        public async static Task<bool> RemoveAppx(string fullPackageName, string certificateName, IProgress<AppxProgress> progress, CancellationToken stop = default)
         {
-            // todo: figure out how to remove app most efficiently, including its certificate
             try
             {
-                //RemoveCertificate("SimpleApp");
+                string shortCertificateName = certificateName.Substring(0, certificateName.IndexOf('_'));
 
-                return true;
+                RemoveCertificate(shortCertificateName);
+
+                Progress<DeploymentProgress> progressCallback = new Progress<DeploymentProgress>((op) =>
+                {
+                    var appxProgress = new AppxProgress(op.percentage, "...");
+                    progress.Report(appxProgress);
+                });
+
+                var pkgManager = new PackageManager();
+
+                Debug.WriteLine("Uninstalling package ...");
+                DeploymentResult result = await pkgManager.RemovePackageAsync(fullPackageName).AsTask(progressCallback).WaitOrCancel(stop);
+                Debug.WriteLine("Package uninstalled ...");
+
+                return result.IsRegistered;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var appxProgress = new AppxProgress(1000, ex.Message);
                 progress.Report(appxProgress);

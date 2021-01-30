@@ -14,6 +14,7 @@ namespace AppxInstaller
         /// </summary>
         public Action<Action> InUiThread = (action) => action();
 
+        string FullPackageName;
         string BundleName;
         string CertificateName;
 
@@ -26,12 +27,13 @@ namespace AppxInstaller
             BundleName = bundleName;
             CertificateName = certificateName;
             InstallDirectory = AppxBundle.GetAppxFolder();
-            IsCurrentlyInstalled = AppxBundle.IsPackageInstalled(packageName, productVersion);
+            IsCurrentlyInstalled = AppxBundle.IsPackageInstalled(packageName, productVersion, out FullPackageName);
 
             ProductStatus = string.Format(installedmessage, IsCurrentlyInstalled ? "" : "NOT ");
         }
 
         CancellationTokenSource cancelTransfer = null;
+
         public async void Install()
         {
             Progress<AppxProgress> progress = new Progress<AppxProgress>(p =>
@@ -59,6 +61,41 @@ namespace AppxInstaller
             cancelTransfer = null;
             IsCurrentlyInstalled = result;
             ProductStatus = string.Format(installedmessage, IsCurrentlyInstalled ? "" : "NOT ");
+            if (result) CurrentActionName = "Success";
+        }
+
+        public async void Uninstall()
+        {
+            if (!IsCurrentlyInstalled)
+                return;
+
+            Progress<AppxProgress> progress = new Progress<AppxProgress>(p =>
+            {
+                if (p.Percentage == 1000)
+                {
+                    ErrorStatus = p.Result;
+                }
+                else if (p.Percentage == ProgressTotal)
+                {
+                    // MP! todo: Resolve what happens on completion.
+                    ProgressCurrentPosition = (int)p.Percentage;
+                }
+                else
+                {
+                    ProgressCurrentPosition = (int)p.Percentage;
+                }
+            });
+
+            //CanCancel = IsRunning = true;
+            IsRunning = true;
+            ProgressTotal = 100;
+            cancelTransfer = new CancellationTokenSource();
+            bool result = await AppxBundle.RemoveAppx(FullPackageName, CertificateName, progress, cancelTransfer.Token);
+            IsRunning = false;
+            cancelTransfer = null;
+            IsCurrentlyInstalled = !result;
+            ProductStatus = string.Format(installedmessage, IsCurrentlyInstalled ? "" : "NOT ");
+            if (result) CurrentActionName = "Success";
         }
 
         /// <summary>
@@ -105,7 +142,7 @@ namespace AppxInstaller
         {
             if (IsCurrentlyInstalled)
             {
-                IsRunning = true;
+                Uninstall();
             }
             else
                 ErrorStatus = "Product is not installed";
