@@ -2,6 +2,14 @@
 
 Appx installation utility.
 
+# ! BROKEN !
+
+Use .NET Core 3.1 version instead: https://github.com/Noemata/AppxInstaller.Core
+
+WPF + .NET 5 + WinRT does not yet appear to be ready for prime time :sob:
+Multiple issues exist in terms of WinRT API access and generating a valid self contained executable.
+Please let me know when these are fixed so I can remove this disclaimer.
+
 Description: 
 
 A utility application that installs the content of an embedded Appx and its Certificate file.

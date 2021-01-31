@@ -25,7 +25,7 @@ namespace AppxInstaller
         const string HelpMessage = "Install Appx from:";
         const string BundleName = "SimpleApp_1.0.0.0_x64.msixbundle";
         const string CertificateName = "SimpleApp_1.0.0.0_x64.cer";
-        const string PackageName = "2495a1ba-4af4-437c-8405-e9cbf8378628";
+        const string PackageName = "2495a1ba-4af4-437c-8405-e9cbf8378628_nw7zm7aeazf2e";
 
         public MainWindow()
         {

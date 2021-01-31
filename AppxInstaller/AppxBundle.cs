@@ -181,7 +181,7 @@ namespace AppxInstaller
                 try
                 {
                     var id = package.Id;
-                    string name = id.Name;
+                    string name = id.FamilyName;
 
                     if (name.Equals(packageName))
                     {
